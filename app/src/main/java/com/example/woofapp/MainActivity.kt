@@ -120,9 +120,9 @@ fun DogInformation(
     }
 }
 
-@Preview()
+@Preview
 @Composable
-fun GreetingPreview() {
+fun WoofAppPreview() {
     WoofAppTheme(darkTheme = false) {
         WoofApp()
     }
