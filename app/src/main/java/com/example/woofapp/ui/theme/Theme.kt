@@ -108,7 +108,7 @@ fun WoofAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        shapes = MaterialTheme.shapes,
+        shapes = Shapes,
         typography = Typography,
         content = content
     )
