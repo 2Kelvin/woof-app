@@ -24,15 +24,15 @@
     )
     ```
 
-- animateContentSize adds animation transition for a ui element that shifts in size
+- animateContentSize adds animation transition for a ui element that shifts in size.
   ```kotlin
   Column(
       // animating a smooth transition when the list's height changes when expanded
       modifier = Modifier.animateContentSize(
-                  animationSpec = spring(
-                      dampingRatio = Spring.DampingRatioLowBouncy, // adding a little card bounce
-                      stiffness = Spring.StiffnessMediumLow // make the height change transition a little bit slower
-                  )
-              )
+          animationSpec = spring(
+              dampingRatio = Spring.DampingRatioLowBouncy, // adding a little card bounce
+              stiffness = Spring.StiffnessMediumLow // make the height change transition a little bit slower
+          )
+      )
   ) {}
   ```
