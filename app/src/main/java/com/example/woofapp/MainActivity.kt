@@ -8,20 +8,30 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,19 +86,76 @@ fun DogItem(
     dog: Dog,
     modifier: Modifier = Modifier
 ) {
+    // tracking if the card is expanded or not using state
+    var expanded by remember { mutableStateOf(false) }
+
     // wrapping each dog item in a card
     // to differentiate the card item from the background
     // by default, a card uses the medium shape
     // it's corner shapes are inherited from the Material.shapes.medium defined in Shapes.kt)
     Card(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_small))
-        ) {
-            DogIcon(dog.imageResourceId)
-            DogInformation(dog.name, dog.age)
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                DogIcon(dog.imageResourceId)
+                DogInformation(dog.name, dog.age)
+                // spacer takes all the left over space left by the other items in the row
+                // this is because it's the only weighted element in the UI
+                Spacer(modifier = Modifier.weight(1f))
+                DogItemButton(
+                    expanded = expanded,
+                    onClick = { expanded = !expanded } // toggle expanded variable on clicks
+                )
+            }
+
+            if (expanded) { // if expanded is true show dog hobby
+                DogHobby(
+                    dogHobby = dog.hobbies,
+                    modifier = Modifier.padding(
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        top = dimensionResource(id = R.dimen.padding_small),
+                        end = dimensionResource(id = R.dimen.padding_medium),
+                        bottom = dimensionResource(id = R.dimen.padding_small)
+                    )
+                )
+            }
         }
+    }
+}
+
+// expand more icon composable
+@Composable
+private fun DogItemButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            // if expanded is true (the card has been expanded) show ExpandLess Icon
+            // else if expanded is false (the card has not been expanded) show ExpandMore Icon
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            contentDescription = stringResource(id = R.string.expand_button_content_description),
+            tint = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+// expandable area displaying dog hobby
+@Composable
+fun DogHobby(@StringRes dogHobby: Int, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text( // About header
+            text = stringResource(id = R.string.about),
+            style = MaterialTheme.typography.labelSmall
+        )
+        Text( // Hobby info
+            text = stringResource(id = dogHobby),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
