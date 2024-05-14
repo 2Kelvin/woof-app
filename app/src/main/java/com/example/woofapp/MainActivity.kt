@@ -5,7 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -88,13 +93,27 @@ fun DogItem(
 ) {
     // tracking if the card is expanded or not using state
     var expanded by remember { mutableStateOf(false) }
+    // animate*AsState() example
+    val color by animateColorAsState(
+        targetValue = if (expanded) MaterialTheme.colorScheme.tertiaryContainer
+        else MaterialTheme.colorScheme.primaryContainer,
+        label = "CardColorChange",
+    )
 
     // wrapping each dog item in a card
     // to differentiate the card item from the background
     // by default, a card uses the medium shape
     // it's corner shapes are inherited from the Material.shapes.medium defined in Shapes.kt)
     Card(modifier = modifier) {
-        Column {
+        Column(modifier = Modifier
+            .animateContentSize( // animating a smooth transition when the list's height changes when expanded
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy, // adding a little card bounce
+                    stiffness = Spring.StiffnessMediumLow // make the height change transition a little bit slower
+                )
+            )
+            .background(color = color) // changing this color on expanded state change
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
