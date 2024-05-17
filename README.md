@@ -1,5 +1,7 @@
 # woof-app
 
+![woofAnimated](https://github.com/2Kelvin/alx-higher_level_programming/assets/85868026/da9970b2-be40-443f-b577-0bd95b07f7a9)
+
 ## FutureMe Notes
 
 - learnt to use a `Scaffold` to create my custom screen layout. To add a top bar pass the lambda to topBar property a composable with a TopBar element.
